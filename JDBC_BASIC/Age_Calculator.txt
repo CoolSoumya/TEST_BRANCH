@@ -1,13 +1,12 @@
-select trunc(months_between(sysdate,dob)/12) year,
-         trunc(mod(months_between(sysdate,dob),12)) month,
-           trunc(sysdate-add_months(dob,trunc(months_between(sysdate,dob)/12)*12+trunc(mod(months_between(sysdate,dob),12)))) day
-    from (Select to_date('15122000','DDMMYYYY') dob from dual);
-    
-    
-select * from (SELECT (CASE WHEN ( ADD_MONTHS(b.DOB_DT,(EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM b.DOB_DT))*12) > SYSDATE ) 
-THEN (EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM B.DOB_DT))-1
-ELSE (EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM B.DOB_DT)) END ) AS AGE, B.DOB_DT, A.* FROM DC_RELATIONSHIPS A, DC_INDV B WHERE A.INDV_ID = B.INDV_ID 
-and a.hist_nav_ind in('S','P') and a.RELATIONSHIP_TYPE_CD = 'PA' )  where age<20;
-
- SELECT DOB_DT,sysdate,
-     TRUNC((SYSDATE - TO_DATE(DOB_DT))/ 365.25) AS AGE_TODAY FROM dc_indv; 
+SELECT
+    trunc(months_between(SYSDATE, dob) / 12) year,
+    trunc(mod(months_between(SYSDATE, dob), 12)) month,
+    trunc(SYSDATE - add_months(dob, trunc(months_between(SYSDATE, dob) / 12) * 12 + trunc(mod(months_between(SYSDATE, dob), 12)))
+    ) day
+FROM
+    (
+        SELECT
+            TO_DATE(?, 'DDMMYYYY') dob
+        FROM
+            dual
+    );

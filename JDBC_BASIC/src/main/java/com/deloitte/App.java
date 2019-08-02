@@ -18,6 +18,8 @@ public class App {
 		Properties props = null;
 		InputStream input = null;
 		Scanner scan = null;
+		QueryFileReader qfr = null;
+		String query = null;
 		try {
 			scan = new Scanner(System.in);
 			input = new FileInputStream(
@@ -27,15 +29,14 @@ public class App {
 			Class.forName(props.getProperty("CLASS_NAME"));
 			conn = DriverManager.getConnection(props.getProperty("URL"), props.getProperty("USERNAME"),
 					props.getProperty("PASSWORD"));
-			pstmt = conn.prepareStatement(
-					"SELECT NAME FROM EMP WHERE ID = ? ");
-			System.out.println("Please enter Emp Id.");
-			pstmt.setInt(1, scan.nextInt());
+			qfr = new QueryFileReader();
+			query = qfr.readQueryFile();
+			pstmt = conn.prepareStatement(query);
+			System.out.println("Please enter your age.");
+			pstmt.setString(1, scan.next());
 			rs = pstmt.executeQuery();
-			if (rs.next() == false)
-				System.out.println("Sorry no employee found for this id.");
 			while (rs.next()) {
-				System.out.println(rs.getString(1));
+				System.out.println("Your age is "+rs.getString(1));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
